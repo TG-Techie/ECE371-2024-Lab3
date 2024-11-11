@@ -67,7 +67,10 @@ def are_relatively_prime(a, b):
 
 
 def generate_keypair(p, q):
-    # def generate_keypair(p: int, q: int) -> Tuple[KeyPair, KeyPair]:
+    """
+    returns (encrypt, decrypt)
+    """
+    # def generate_keypair(p: int, q: int) -> Tuple[Key, Key]:
 
     if not (is_prime(p) and is_prime(q)):
         raise ValueError("Both numbers must be prime.")

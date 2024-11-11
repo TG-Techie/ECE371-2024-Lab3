@@ -1,7 +1,7 @@
 import sys
 from socket import socket, AF_INET, SOCK_DGRAM, gethostbyname, gethostname
-from RSA import generate_keypair, encrypt, decrypt
-
+import RSA as rsa
+import json
 
 # SERVER_IP = gethostbyname("DE1_SoC")
 SERVER_IP = gethostbyname(gethostname())
@@ -24,21 +24,35 @@ q = 1297651
 # generate public and private key from the p and q values
 # hint: use generate_keypair() function from RSA.py
 
-public = [0, 0]
-private = [0, 0]
+# returns  ((e, n), (d, n))
+public_key, private_key = rsa.generate_keypair(p, q)
 
-message = "public_key: %d %d" % (public[0], public[1])
+pub_e, pub_n = public_key
+message = """(public_key{"e": %d, "n": %d}public_key)""" % (pub_e, pub_n)
+print("sending", repr(message))
 mySocket.sendto(message.encode(), (SERVER_IP, PORT_NUMBER))
+
+print("\n\n")
 while True:
-    message = input()
-    message.join("\n")
+    message = input("input meeasge to send: ")
+    message += "\n"
+
     ###################################your code goes here#####################################
     # message is a string input received from the user, encrypt it with RSA character by character and save in message_encoded
     # message encoded is a list of integer ciphertext values in string format e.g. ['23131','352135','54213513']
     # hint: encrypt each character in message using RSA and store in message_encoded
-    message_encoded = ["1", "135", "53"]
-    [
+
+    # message_encoded = ["1", "135", "53"]
+    message_encoded = [str(rsa.encrypt(private_key, char)) for char in message]
+
+    for code in message_encoded:
+        print("sending code =", code)
         mySocket.sendto(code.encode(), (SERVER_IP, PORT_NUMBER))
-        for code in message_encoded
-    ]  # do not change [sends message through socket]
+
+    print("sent mesage = ", repr(message))
+
+    # [
+    #     mySocket.sendto(code.encode(), (SERVER_IP, PORT_NUMBER))
+    #     for code in message_encoded
+    # ]  # do not change [sends message through socket]
 sys.exit()
