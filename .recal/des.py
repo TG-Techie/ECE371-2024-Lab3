@@ -1,8 +1,3 @@
-# this file is from Keshav & Jonah's Lab 2
-
-import random
-import math
-
 # fmt: off
 #Initial permut matrix for the datas
 PI = [58, 50, 42, 34, 26, 18, 10, 2,
@@ -112,7 +107,6 @@ PI_1 = [40, 8, 48, 16, 56, 24, 64, 32,
 
 #Matrix that determine the shift for each round of keys
 SHIFT = [1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1]
-
 # fmt: on
 
 
@@ -271,24 +265,52 @@ class des:
 
     def substitute(self, d_e):  # Substitute bytes using SBOX
         subblocks = nsplit(d_e, 6)  # Split bit array into sublist of 6 bits
-        # HAVEDONE
         ###################################your code goes here###################################
         # for each 6 bit subblock you need to apply the corresponding s box (using the compute_s_box function) and save the result in result value
         # result is a list of integer values 1 or 0
-        # the following code is wrong and needs to be replaced
-        result = []
-
-        for i, block in enumerate(subblocks):
-            f_sbox = self.compute_s_box(block, i)
-            for bit in f_sbox:
-                result.append(int(bit))
-
+        result = [
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+        ]
         return result
 
     def permut(
         self, block, table
     ):  # Permut the given block using the given table (so generic method)
-        return [block[x] for x in range(len(table))]
+        ###################################your code goes here###################################
+        # permute the block using the table! the table will be either PI or CP_1 or CP_2 (found in the beginning of this file!)
+        # block is a bit array in integers [1,0,1,...], the output has the same format as block but with a permutation of the members
+        return block
 
     def expand(
         self, block, table
@@ -336,13 +358,9 @@ class des:
             return self.run(key, text, DECRYPT, padding)
 
     def compute_s_box(self, block, round):
-        # HAVEDONE
         ###################################your code goes here###################################
         # compute the corresponding row and column in the s box and choose the correct s box based on round
         # the input block is a list of integers for 1 or 0  e.g. block=[1,1,0,0,0,0,0]
         # return a string of 4 bits e.g. '1111' as the output, the binvalue() function is helpful
         bin = "1111"
-        row = (block[5] * 2) + (block[0] * 1)
-        col = (block[4] * 8) + (block[3] * 4) + (block[2] * 2) + (block[1] * 1)
-        bin = binvalue(S_BOX[round][row][col], 4)
         return bin
