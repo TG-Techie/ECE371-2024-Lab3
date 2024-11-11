@@ -1,4 +1,4 @@
-from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
+from socket import socket, gethostbyname, gethostname, AF_INET, SOCK_DGRAM
 import sys
 import re
 from RSA import decrypt
@@ -6,7 +6,8 @@ from RSA import decrypt
 PORT_NUMBER = 5000
 SIZE = 1024
 
-hostName = gethostbyname("DE1_SoC")
+hostName = gethostbyname(gethostname())
+# hostName = gethostbyname("DE1_SoC")
 # hostName = gethostbyname( 'DESKTOP-A30LB1P' )
 
 mySocket = socket(AF_INET, SOCK_DGRAM)
