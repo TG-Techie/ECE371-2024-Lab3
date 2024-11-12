@@ -40,8 +40,10 @@ file = open(r"penguin.jpg", "rb")
 image_data = file.read()
 file.close()
 coder = des.des()
-r = coder.encrypt(des_key, image_data, cbc=False)  # encrypted image
 
+print(f"{len(image_data)=}")
+r = coder.encrypt(des_key, image_data, cbc=False)  # encrypted image
+print(f"{len(r)=}")
 
 # write the encrypted image into file
 r_byte = bytearray()
