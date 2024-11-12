@@ -1,4 +1,4 @@
-from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
+from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM, gethostname
 import sys
 import re
 import struct
@@ -9,8 +9,8 @@ import des
 PORT_NUMBER = 5000
 SIZE = 8192
 
-# hostName = gethostbyname( '192.168.1.3' )
-hostName = gethostbyname("DE1_SoC")
+hostName = gethostbyname(gethostname())
+# hostName = gethostbyname("DE1_SoC")
 
 mySocket = socket(AF_INET, SOCK_DGRAM)
 mySocket.bind((hostName, PORT_NUMBER))

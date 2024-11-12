@@ -34,7 +34,7 @@ mySocket.sendto(message.encode(), (SERVER_IP, PORT_NUMBER))
 
 print("\n\n")
 while True:
-    message = input("input meeasge to send: ")
+    message = input("input mesasge to send: ")
     message += "\n"
 
     ###################################your code goes here#####################################

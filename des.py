@@ -137,7 +137,7 @@ def bit_array_to_string(array):  # Recreate the string from the bit array
 def binvalue(val, bitsize):  # Return the binary value as a string of the given size
     binval = bin(val)[2:] if isinstance(val, int) else bin(ord(val))[2:]
     if len(binval) > bitsize:
-        raise "binary value larger than the expected size"
+        raise ValueError("binary value larger than the expected size")
     while len(binval) < bitsize:
         binval = "0" + binval  # Add as many 0 as needed to get the wanted size
     return binval
@@ -159,7 +159,7 @@ class des:
 
     def run(self, key, text, action=ENCRYPT, padding=False):
         if len(key) < 8:
-            raise "Key Should be 8 bytes long"
+            raise ValueError("Key Should be 8 bytes long")
         elif len(key) > 8:
             key = key[:8]  # If key size is above 8bytes, cut to be 8bytes long
 
@@ -171,7 +171,7 @@ class des:
         elif (
             len(self.text) % 8 != 0
         ):  # If not padding specified data size must be multiple of 8 bytes
-            raise "Data size should be multiple of 8"
+            raise ValueError("Data size should be multiple of 8")
 
         self.generatekeys()  # Generate all the keys
         text_blocks = nsplit(
@@ -210,7 +210,7 @@ class des:
     def run_cbc(self, key, text, action=ENCRYPT, padding=False, IV="ASASASAS"):
 
         if len(key) < 8:
-            raise "Key Should be 8 bytes long"
+            raise ValueError("Key Should be 8 bytes long")
         elif len(key) > 8:
             key = key[:8]  # If key size is above 8bytes, cut to be 8bytes long
 
@@ -222,7 +222,7 @@ class des:
         elif (
             len(self.text) % 8 != 0
         ):  # If not padding specified data size must be multiple of 8 bytes
-            raise "Data size should be multiple of 8"
+            raise ValueError("Data size should be multiple of 8")
 
         self.generatekeys()  # Generate all the keys
         text_blocks = nsplit(

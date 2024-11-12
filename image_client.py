@@ -1,17 +1,18 @@
 import sys
-from socket import socket, AF_INET, SOCK_DGRAM, gethostbyname
+from socket import socket, AF_INET, SOCK_DGRAM, gethostbyname, gethostname
 from RSA import generate_keypair, encrypt, decrypt
 
 import RSA as rsa
 import des
 
-import struct
+import json
 
 
-SERVER_IP = gethostbyname("DE1_SoC")
+SERVER_IP = gethostbyname(gethostname())
 PORT_NUMBER = 5000
 SIZE = 1024
 des_key = "secret_k"
+
 print(
     "Test client sending packets to IP {0}, via port {1}\n".format(
         SERVER_IP, PORT_NUMBER
@@ -36,19 +37,15 @@ message = """(public_key{"e": %d, "n": %d}public_key)""" % (pub_e, pub_n)
 print("sending", repr(message))
 mySocket.sendto(message.encode(), (SERVER_IP, PORT_NUMBER))
 
-# send des_key
-message = "des_key"
-mySocket.sendto(message.encode(), (SERVER_IP, PORT_NUMBER))
 ###################################your code goes here#####################################
 # encode the DES key with RSA and save in DES_encoded, the value below is just an example
-des_encoded = [str(rsa.encrypt(private_key, char)) for char in message]
-#des_encoded = ["2313", "3231", "532515", "542515", "5135151", "31413", "15315", "14314"]
+des_key_encoded = [str(rsa.encrypt(private_key, char)) for char in des_key]
 
-[mySocket.sendto(code.encode(), (SERVER_IP, PORT_NUMBER)) for code in des_encoded]
-# read image, encode, send the encoded image binary file
-file = open(r"penguin.jpg", "rb")
-data = file.read()
-file.close()
+mySocket.sendto(
+    ("(des_key" + json.dumps(des_key_encoded) + "des_key)").encode(),
+    (SERVER_IP, PORT_NUMBER),
+)
+
 ###################################your code goes here#####################################
 # the image is saved in the data parameter, you should encrypt it using des.py
 # set cbc to False when performing encryption, you should use the des class
@@ -56,7 +53,19 @@ file.close()
 # r_byte is the final value you will send through socket
 r_byte = bytearray()
 
+coder = des.des()
+
+
+# read image, encode, send the encoded image binary file
+with open("penguin.jpg", "rb") as file:
+    raw_image = file.read()
+
+print(f"{len(raw_image)=}")
+ciphered_image = coder.encrypt(des_key, raw_image, cbc=False).encode()
+print(f"{len(ciphered_image)=}")
 
 # send image through socket
-mySocket.sendto(bytes(r_byte), (SERVER_IP, PORT_NUMBER))
+mySocket.sendto(ciphered_image, (SERVER_IP, PORT_NUMBER))
+
+
 print("encrypted image sent!")
