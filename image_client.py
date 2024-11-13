@@ -63,10 +63,9 @@ coder = des.des()
 with open("penguin.jpg", "rb") as file:
     raw_image = file.read()
 
-print(f"{len(raw_image)=}")
+# print(f"{len(raw_image)=}")
 ciphered_image = coder.encrypt(des_key, raw_image, cbc=False)
-
-print(f"{len(ciphered_image)=}", type(ciphered_image))
+# print(f"{len(ciphered_image)=}", type(ciphered_image))
 
 remaining_ciphered_image = ciphered_image.encode()
 while len(remaining_ciphered_image):
